@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Prediction | BetVital Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+    <nav class="bg-slate-900 border-b border-slate-800 h-20 px-6 flex items-center justify-between sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="bg-emerald-600 text-white w-8 h-8 flex items-center justify-center rounded-lg font-black text-sm">BV</div>
+            <span class="text-lg font-black tracking-tighter uppercase italic">Bet<span class="text-emerald-500 text-xs">Vital Admin</span></span>
+        </div>
+        <a href="/" class="text-xs font-black uppercase tracking-widest text-slate-500 hover:text-white transition-colors">Exit Dashboard</a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto py-16 px-6">
+        <div class="mb-12">
+            <h1 class="text-4xl font-black tracking-tighter uppercase italic text-white">Create Prediction</h1>
+            <p class="text-slate-500 font-bold uppercase text-[10px] tracking-[0.4em] mt-2">Professional Manual Data Entry</p>
+        </div>
+
+        <form action="/admin/add" method="POST" class="bg-slate-900 border border-slate-800 rounded-[2.5rem] p-8 md:p-12 shadow-2xl space-y-12">
+            <!-- Row 1: League & Date -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">League Name</label>
+                    <input type="text" name="league_name" required placeholder="e.g. Premier League" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 text-white transition-all">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Match Schedule</label>
+                    <input type="datetime-local" name="match_date" required class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 text-white transition-all">
+                </div>
+            </div>
+
+            <!-- Row 2: Teams & Form -->
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Home Team</label>
+                        <input type="text" name="home_team_name" required placeholder="Team A" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 text-white transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Home Form</label>
+                        <input type="text" name="home_form" placeholder="W W D L W" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 text-white transition-all">
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Away Team</label>
+                        <input type="text" name="away_team_name" required placeholder="Team B" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 text-white transition-all">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Away Form</label>
+                        <input type="text" name="away_form" placeholder="L L D D W" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 text-white transition-all">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Row 3: Prediction & Confidence -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Main Prediction</label>
+                    <select name="prediction_main" required class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 text-white transition-all appearance-none">
+                        <option value="Home Win">Home Win</option>
+                        <option value="Away Win">Away Win</option>
+                        <option value="Draw">Draw</option>
+                        <option value="BTTS (Yes)">BTTS (Yes)</option>
+                        <option value="Over 2.5 Goals">Over 2.5 Goals</option>
+                        <option value="Under 2.5 Goals">Under 2.5 Goals</option>
+                        <option value="Double Chance 1X">Double Chance 1X</option>
+                    </select>
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Expert Confidence (%)</label>
+                    <input type="number" name="prediction_confidence" required min="1" max="100" placeholder="e.g. 85" class="w-full bg-slate-800 border border-slate-700 p-4 rounded-2xl text-sm outline-none focus:ring-2 focus:ring-emerald-500 text-white transition-all">
+                </div>
+            </div>
+
+            <!-- Row 4: Analysis -->
+            <div class="space-y-2">
+                <label class="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Tactical Analysis</label>
+                <textarea name="analysis_content" required placeholder="Explain the tactical reasoning for this pick..." class="w-full bg-slate-800 border border-slate-700 p-6 rounded-[2rem] h-48 text-sm outline-none focus:ring-2 focus:ring-emerald-500 text-white transition-all resize-none"></textarea>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="pt-6">
+                <button type="submit" class="w-full py-5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-[1.5rem] font-black uppercase tracking-[0.3em] text-xs transition-all shadow-xl shadow-emerald-900/40">
+                    Publish Prediction
+                </button>
+                <div class="mt-8 text-center">
+                    <a href="/" class="text-slate-600 hover:text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] transition-colors">Discard Changes</a>
+                </div>
+            </div>
+        </form>
+    </main>
+</body>
+</html>
