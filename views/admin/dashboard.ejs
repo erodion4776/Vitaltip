@@ -5,29 +5,69 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 p-6">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-5xl mx-auto">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">Admin Dashboard</h1>
-            <a href="/admin/add" class="bg-emerald-600 text-white px-4 py-2 rounded">Add New Match</a>
+            <div>
+                <a href="/" class="text-blue-600 mr-4 text-sm underline">View Site</a>
+                <a href="/admin/add" class="bg-emerald-600 text-white px-4 py-2 rounded font-bold hover:bg-emerald-700">Add Match</a>
+            </div>
         </div>
 
         <div class="bg-white rounded shadow overflow-hidden">
-            <table class="w-full text-left">
-                <thead class="bg-gray-200">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-gray-800 text-white text-sm">
                     <tr>
                         <th class="p-3">Date</th>
-                        <th class="p-3">Match</th>
-                        <th class="p-3">Prediction</th>
-                        <th class="p-3">Status</th>
+                        <th class="p-3">Match Details</th>
+                        <th class="p-3 text-right">Update Result</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-sm">
                     <% matches.forEach(match => { %>
-                    <tr class="border-b">
-                        <td class="p-3"><%= new Date(match.match_date).toLocaleDateString() %></td>
-                        <td class="p-3"><%= match.home_team %> vs <%= match.away_team %></td>
-                        <td class="p-3 font-bold"><%= match.prediction %></td>
-                        <td class="p-3"><%= match.status %></td>
+                    <tr class="border-b hover:bg-gray-50">
+                        <td class="p-3 text-gray-500 whitespace-nowrap">
+                            <%= new Date(match.match_date).toLocaleDateString() %>
+                        </td>
+                        <td class="p-3">
+                            <div class="font-bold text-gray-800"><%= match.home_team %> vs <%= match.away_team %></div>
+                            <div class="text-xs text-gray-500"><%= match.league %></div>
+                            <div class="text-emerald-600 font-bold text-xs mt-1">Tip: <%= match.prediction %> (<%= match.confidence %>%)</div>
+                        </td>
+                        
+                        <td class="p-3 text-right">
+                            <% if(match.status !== 'finished') { %>
+                                <!-- Form to Add Result -->
+                                <form action="/admin/update-result" method="POST" class="flex gap-2 justify-end items-center">
+                                    <input type="hidden" name="match_id" value="<%= match.id %>">
+                                    
+                                    <input type="text" name="result_score" placeholder="1-0" 
+                                           class="border border-gray-300 p-1 w-16 text-center rounded" required>
+                                           
+                                    <select name="bet_status" class="border border-gray-300 p-1 rounded bg-white">
+                                        <option value="won">Won</option>
+                                        <option value="lost">Lost</option>
+                                        <option value="void">Void</option>
+                                    </select>
+                                    
+                                    <button type="submit" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">
+                                        Save
+                                    </button>
+                                </form>
+                            <% } else { %>
+                                <!-- Already Finished -->
+                                <div class="flex flex-col items-end">
+                                    <span class="font-mono font-bold text-lg"><%= match.result_score %></span>
+                                    <% if(match.bet_status === 'won') { %>
+                                        <span class="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded font-bold">WON</span>
+                                    <% } else if (match.bet_status === 'lost') { %>
+                                        <span class="bg-red-100 text-red-800 text-xs px-2 py-0.5 rounded font-bold">LOST</span>
+                                    <% } else { %>
+                                        <span class="bg-gray-200 text-gray-800 text-xs px-2 py-0.5 rounded">VOID</span>
+                                    <% } %>
+                                </div>
+                            <% } %>
+                        </td>
                     </tr>
                     <% }) %>
                 </tbody>
