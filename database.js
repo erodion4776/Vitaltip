@@ -1,48 +1,48 @@
-const { Sequelize, DataTypes, Model } = require('sequelize');
+const Sequelize = require('sequelize');
+const path = require('path');
 
+// Setup SQLite Database
 const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: './database.sqlite',
-  logging: false
+    dialect: 'sqlite',
+    storage: path.join(__dirname, 'database.sqlite'),
+    logging: false
 });
 
-class League extends Model {}
-League.init({
-  name: DataTypes.STRING,
-  country: DataTypes.STRING,
-  logo_url: DataTypes.STRING,
-  slug: DataTypes.STRING
-}, { sequelize, modelName: 'League' });
+// 1. The Match Model (Stores your predictions)
+const Match = sequelize.define('Match', {
+    league: { type: Sequelize.STRING, allowNull: false },
+    home_team: { type: Sequelize.STRING, allowNull: false },
+    away_team: { type: Sequelize.STRING, allowNull: false },
+    match_date: { type: Sequelize.DATE, allowNull: false },
+    
+    // Stats & Form
+    home_form: { type: Sequelize.STRING }, // e.g., "W W D L W"
+    away_form: { type: Sequelize.STRING },
+    head_to_head: { type: Sequelize.TEXT }, // Manual notes
+    
+    // Prediction Content
+    analysis: { type: Sequelize.TEXT }, // Long explanation
+    prediction: { type: Sequelize.STRING, allowNull: false }, // e.g., "Over 2.5 Goals"
+    confidence: { type: Sequelize.INTEGER }, // 1-100
+    
+    // SEO & Money
+    slug: { type: Sequelize.STRING, unique: true }, // e.g. "arsenal-vs-chelsea-prediction"
+    affiliate_link: { type: Sequelize.STRING },
+    
+    // Results
+    status: { type: Sequelize.STRING, defaultValue: 'upcoming' }, // upcoming, finished
+    result_score: { type: Sequelize.STRING } // e.g. "2-1"
+});
 
-class Team extends Model {}
-Team.init({
-  name: DataTypes.STRING,
-  logo_url: DataTypes.STRING
-}, { sequelize, modelName: 'Team' });
+// 2. The Admin Model (For security)
+const Admin = sequelize.define('Admin', {
+    username: { type: Sequelize.STRING, unique: true },
+    password: { type: Sequelize.STRING }
+});
 
-class Match extends Model {}
-Match.init({
-  match_date: DataTypes.DATE,
-  status: { type: DataTypes.STRING, defaultValue: 'upcoming' },
-  home_form: DataTypes.STRING,
-  away_form: DataTypes.STRING,
-  head_to_head_text: DataTypes.TEXT,
-  analysis_content: DataTypes.TEXT,
-  prediction_main: DataTypes.STRING,
-  prediction_confidence: DataTypes.INTEGER,
-  affiliate_link: DataTypes.STRING,
-  result_score: DataTypes.STRING,
-  slug: DataTypes.STRING
-}, { sequelize, modelName: 'Match' });
+// Sync Database
+sequelize.sync().then(() => {
+    console.log("Database & Tables created!");
+});
 
-class Admin extends Model {}
-Admin.init({
-  username: { type: DataTypes.STRING, unique: true },
-  password_hash: DataTypes.STRING
-}, { sequelize, modelName: 'Admin' });
-
-Match.belongsTo(Team, { as: 'HomeTeam', foreignKey: 'home_team_id' });
-Match.belongsTo(Team, { as: 'AwayTeam', foreignKey: 'away_team_id' });
-Match.belongsTo(League, { foreignKey: 'league_id' });
-
-module.exports = { sequelize, League, Team, Match, Admin };
+module.exports = { sequelize, Match, Admin };
