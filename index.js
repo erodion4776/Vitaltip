@@ -19,17 +19,17 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Helper: Convert text to SEO Slug
 function createSlug(home, away) {
-    return `${home.toLowerCase()}-vs-${away.toLowerCase()}-prediction-${Date.now()}`.replace(/ /g, '-');
+    return `${home.toLowerCase()}-vs-${away.toLowerCase()}-prediction-${Date.now()}`.replace(/[^a-z0-9]/g, '-');
 }
 
 // --- PUBLIC ROUTES ---
 
-// 1. Homepage
+// 1. Homepage (Only show upcoming matches)
 app.get('/', async (req, res) => {
     try {
         const matches = await Match.findAll({
+            where: { status: 'upcoming' }, // Only show games not played yet
             order: [['match_date', 'ASC']]
         });
         res.render('index', { matches });
@@ -38,7 +38,20 @@ app.get('/', async (req, res) => {
     }
 });
 
-// 2. Match Detail (SEO Page)
+// 2. Results Page (NEW)
+app.get('/results', async (req, res) => {
+    try {
+        const matches = await Match.findAll({
+            where: { status: 'finished' }, // Only show finished games
+            order: [['match_date', 'DESC']]
+        });
+        res.render('results', { matches });
+    } catch (err) {
+        res.send("Error loading results.");
+    }
+});
+
+// 3. Match Detail
 app.get('/prediction/:slug', async (req, res) => {
     try {
         const match = await Match.findOne({ where: { slug: req.params.slug } });
@@ -51,13 +64,10 @@ app.get('/prediction/:slug', async (req, res) => {
 
 // --- ADMIN ROUTES ---
 
-// 3. Admin Login Page
 app.get('/admin/login', (req, res) => res.render('admin/login'));
 
-// 4. Admin Login Logic (Simple hardcoded for MVP)
 app.post('/admin/login', (req, res) => {
     const { username, password } = req.body;
-    // CHANGE THIS PASSWORD LATER
     if (username === 'admin' && password === 'admin123') {
         req.session.isLoggedIn = true;
         res.redirect('/admin/dashboard');
@@ -66,24 +76,19 @@ app.post('/admin/login', (req, res) => {
     }
 });
 
-// Middleware to protect admin pages
 const requireLogin = (req, res, next) => {
     if (!req.session.isLoggedIn) return res.redirect('/admin/login');
     next();
 };
 
-// 5. Admin Dashboard
+// Admin Dashboard (Shows ALL matches to edit them)
 app.get('/admin/dashboard', requireLogin, async (req, res) => {
-    const matches = await Match.findAll({ order: [['createdAt', 'DESC']] });
+    const matches = await Match.findAll({ order: [['match_date', 'DESC']] });
     res.render('admin/dashboard', { matches });
 });
 
-// 6. Add Match Page
-app.get('/admin/add', requireLogin, (req, res) => {
-    res.render('admin/add-match');
-});
+app.get('/admin/add', requireLogin, (req, res) => res.render('admin/add-match'));
 
-// 7. Save New Match
 app.post('/admin/add', requireLogin, async (req, res) => {
     try {
         const { league, match_date, home_team, away_team, home_form, away_form, analysis, prediction, confidence, affiliate_link } = req.body;
@@ -92,7 +97,8 @@ app.post('/admin/add', requireLogin, async (req, res) => {
             league, home_team, away_team,
             match_date, home_form, away_form,
             analysis, prediction, confidence, affiliate_link,
-            slug: createSlug(home_team, away_team)
+            slug: createSlug(home_team, away_team),
+            status: 'upcoming'
         });
         
         res.redirect('/admin/dashboard');
@@ -102,5 +108,18 @@ app.post('/admin/add', requireLogin, async (req, res) => {
     }
 });
 
-// Start Server
+// Route to Save Result (NEW)
+app.post('/admin/update-result', requireLogin, async (req, res) => {
+    try {
+        const { match_id, result_score, bet_status } = req.body;
+        await Match.update(
+            { result_score, bet_status, status: 'finished' },
+            { where: { id: match_id } }
+        );
+        res.redirect('/admin/dashboard');
+    } catch (err) {
+        res.send("Error updating result.");
+    }
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
