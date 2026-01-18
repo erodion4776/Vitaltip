@@ -8,7 +8,7 @@ const sequelize = new Sequelize({
     logging: false
 });
 
-// 1. The Match Model (Stores your predictions)
+// The Match Model
 const Match = sequelize.define('Match', {
     league: { type: Sequelize.STRING, allowNull: false },
     home_team: { type: Sequelize.STRING, allowNull: false },
@@ -16,33 +16,33 @@ const Match = sequelize.define('Match', {
     match_date: { type: Sequelize.DATE, allowNull: false },
     
     // Stats & Form
-    home_form: { type: Sequelize.STRING }, // e.g., "W W D L W"
+    home_form: { type: Sequelize.STRING }, 
     away_form: { type: Sequelize.STRING },
-    head_to_head: { type: Sequelize.TEXT }, // Manual notes
     
     // Prediction Content
-    analysis: { type: Sequelize.TEXT }, // Long explanation
-    prediction: { type: Sequelize.STRING, allowNull: false }, // e.g., "Over 2.5 Goals"
-    confidence: { type: Sequelize.INTEGER }, // 1-100
+    analysis: { type: Sequelize.TEXT }, 
+    prediction: { type: Sequelize.STRING, allowNull: false }, 
+    confidence: { type: Sequelize.INTEGER }, 
     
     // SEO & Money
-    slug: { type: Sequelize.STRING, unique: true }, // e.g. "arsenal-vs-chelsea-prediction"
+    slug: { type: Sequelize.STRING, unique: true }, 
     affiliate_link: { type: Sequelize.STRING },
     
-    // Results
-    status: { type: Sequelize.STRING, defaultValue: 'upcoming' }, // upcoming, finished
-    result_score: { type: Sequelize.STRING } // e.g. "2-1"
+    // --- NEW COLUMNS FOR RESULTS ---
+    status: { type: Sequelize.STRING, defaultValue: 'upcoming' }, // 'upcoming' or 'finished'
+    result_score: { type: Sequelize.STRING }, // e.g., "2-1"
+    bet_status: { type: Sequelize.STRING } // 'won', 'lost', or 'void'
 });
 
-// 2. The Admin Model (For security)
+// The Admin Model
 const Admin = sequelize.define('Admin', {
     username: { type: Sequelize.STRING, unique: true },
     password: { type: Sequelize.STRING }
 });
 
-// Sync Database
-sequelize.sync().then(() => {
-    console.log("Database & Tables created!");
+// Sync Database (alter: true updates the table if you added new columns)
+sequelize.sync({ alter: true }).then(() => {
+    console.log("Database & Tables updated successfully!");
 });
 
 module.exports = { sequelize, Match, Admin };
