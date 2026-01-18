@@ -1,105 +1,106 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const { sequelize, League, Team, Match } = require('./database');
+const session = require('express-session');
+const { Match, Admin } = require('./database');
+const { Op } = require('sequelize');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// View Engine Setup
+// Setup Middleware
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-// Middleware
+app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+    secret: 'secret_key_vital',
+    resave: false,
+    saveUninitialized: true
+}));
 
-// Routes
+// Helper: Convert text to SEO Slug
+function createSlug(home, away) {
+    return `${home.toLowerCase()}-vs-${away.toLowerCase()}-prediction-${Date.now()}`.replace(/ /g, '-');
+}
+
+// --- PUBLIC ROUTES ---
+
+// 1. Homepage
 app.get('/', async (req, res) => {
     try {
         const matches = await Match.findAll({
-            include: [
-                { model: Team, as: 'HomeTeam' },
-                { model: Team, as: 'AwayTeam' },
-                { model: League }
-            ],
-            order: [['match_date', 'DESC']]
+            order: [['match_date', 'ASC']]
         });
-        res.render('index', { matches, title: 'Expert Predictions' });
+        res.render('index', { matches });
     } catch (err) {
-        console.error("Home error:", err);
-        res.status(500).send("Database Error: " + err.message);
+        res.send("Error loading matches.");
     }
 });
 
-app.get('/admin/add', (req, res) => {
+// 2. Match Detail (SEO Page)
+app.get('/prediction/:slug', async (req, res) => {
+    try {
+        const match = await Match.findOne({ where: { slug: req.params.slug } });
+        if (!match) return res.send("Match not found");
+        res.render('match-detail', { match });
+    } catch (err) {
+        res.send("Error loading page.");
+    }
+});
+
+// --- ADMIN ROUTES ---
+
+// 3. Admin Login Page
+app.get('/admin/login', (req, res) => res.render('admin/login'));
+
+// 4. Admin Login Logic (Simple hardcoded for MVP)
+app.post('/admin/login', (req, res) => {
+    const { username, password } = req.body;
+    // CHANGE THIS PASSWORD LATER
+    if (username === 'admin' && password === 'admin123') {
+        req.session.isLoggedIn = true;
+        res.redirect('/admin/dashboard');
+    } else {
+        res.send("Wrong password. <a href='/admin/login'>Try again</a>");
+    }
+});
+
+// Middleware to protect admin pages
+const requireLogin = (req, res, next) => {
+    if (!req.session.isLoggedIn) return res.redirect('/admin/login');
+    next();
+};
+
+// 5. Admin Dashboard
+app.get('/admin/dashboard', requireLogin, async (req, res) => {
+    const matches = await Match.findAll({ order: [['createdAt', 'DESC']] });
+    res.render('admin/dashboard', { matches });
+});
+
+// 6. Add Match Page
+app.get('/admin/add', requireLogin, (req, res) => {
     res.render('admin/add-match');
 });
 
-app.post('/admin/add', async (req, res) => {
+// 7. Save New Match
+app.post('/admin/add', requireLogin, async (req, res) => {
     try {
-        const {
-            league_name,
-            match_date,
-            home_team_name,
-            away_team_name,
-            home_form,
-            away_form,
-            analysis_content,
-            prediction_main,
-            prediction_confidence,
-            affiliate_link,
-            result_score
-        } = req.body;
-
-        const [league] = await League.findOrCreate({
-            where: { name: league_name },
-            defaults: { country: 'International', slug: league_name.toLowerCase().replace(/\s+/g, '-') }
-        });
-
-        const [homeTeam] = await Team.findOrCreate({ where: { name: home_team_name } });
-        const [awayTeam] = await Team.findOrCreate({ where: { name: away_team_name } });
-
-        const slug = `${home_team_name}-vs-${away_team_name}-${Date.now()}`.toLowerCase().replace(/\s+/g, '-');
-
+        const { league, match_date, home_team, away_team, home_form, away_form, analysis, prediction, confidence, affiliate_link } = req.body;
+        
         await Match.create({
-            home_team_id: homeTeam.id,
-            away_team_id: awayTeam.id,
-            league_id: league.id,
-            match_date,
-            status: result_score ? 'finished' : 'upcoming',
-            home_form,
-            away_form,
-            analysis_content,
-            prediction_main,
-            prediction_confidence: parseInt(prediction_confidence),
-            affiliate_link,
-            result_score,
-            slug
+            league, home_team, away_team,
+            match_date, home_form, away_form,
+            analysis, prediction, confidence, affiliate_link,
+            slug: createSlug(home_team, away_team)
         });
-
-        res.redirect('/');
+        
+        res.redirect('/admin/dashboard');
     } catch (err) {
-        console.error("POST /admin/add error:", err);
-        res.status(400).send("Error: " + err.message);
-    }
-});
-
-app.get('/setup', async (req, res) => {
-    try {
-        await sequelize.sync({ force: true });
-        res.send("Database Sync Complete. <a href='/admin/add'>Add Prediction</a>");
-    } catch (err) {
-        res.status(500).send(err.message);
+        console.log(err);
+        res.send("Error saving match.");
     }
 });
 
 // Start Server
-sequelize.sync().then(() => {
-    app.listen(PORT, () => {
-        console.log("SERVER STARTED SUCCESSFULLY");
-    });
-}).catch(err => {
-    console.error("Failed to sync database:", err);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
