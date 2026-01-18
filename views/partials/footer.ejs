@@ -1,0 +1,64 @@
+<footer class="bg-dark text-light py-5 mt-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="bi bi-trophy-fill me-2 text-warning"></i><%= config.name %>
+                </h5>
+                <p class="text-muted">
+                    Professional football predictions backed by data analysis and expert insights. 
+                    Your trusted source for match predictions.
+                </p>
+                <div class="social-links mt-3">
+                    <a href="#" class="text-light me-3"><i class="bi bi-twitter fs-5"></i></a>
+                    <a href="#" class="text-light me-3"><i class="bi bi-facebook fs-5"></i></a>
+                    <a href="#" class="text-light me-3"><i class="bi bi-instagram fs-5"></i></a>
+                    <a href="#" class="text-light"><i class="bi bi-telegram fs-5"></i></a>
+                </div>
+            </div>
+            
+            <div class="col-lg-2 col-md-4">
+                <h6 class="fw-bold mb-3">Quick Links</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="/" class="text-muted text-decoration-none">Predictions</a></li>
+                    <li class="mb-2"><a href="/results" class="text-muted text-decoration-none">Results</a></li>
+                    <li class="mb-2"><a href="/about" class="text-muted text-decoration-none">About Us</a></li>
+                    <li class="mb-2"><a href="/faq" class="text-muted text-decoration-none">FAQ</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-lg-2 col-md-4">
+                <h6 class="fw-bold mb-3">Leagues</h6>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Premier League</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">La Liga</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Serie A</a></li>
+                    <li class="mb-2"><a href="#" class="text-muted text-decoration-none">Bundesliga</a></li>
+                </ul>
+            </div>
+            
+            <div class="col-lg-4 col-md-4">
+                <h6 class="fw-bold mb-3">Disclaimer</h6>
+                <p class="text-muted small">
+                    Our predictions are for informational purposes only. Gambling involves risk. 
+                    Please bet responsibly and only with money you can afford to lose. 
+                    Must be 18+ to participate.
+                </p>
+            </div>
+        </div>
+        
+        <hr class="my-4 border-secondary">
+        
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="mb-0 text-muted small">
+                    &copy; <%= new Date().getFullYear() %> <%= config.name %>. All rights reserved.
+                </p>
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <a href="/privacy" class="text-muted small text-decoration-none me-3">Privacy Policy</a>
+                <a href="/terms" class="text-muted small text-decoration-none">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
