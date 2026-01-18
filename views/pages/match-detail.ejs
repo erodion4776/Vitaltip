@@ -1,0 +1,215 @@
+<% layout('layouts/main') %>
+
+<!-- Breadcrumb -->
+<section class="bg-light py-3">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/"><%= match.league %></a></li>
+                <li class="breadcrumb-item active"><%= match.home_team %> vs <%= match.away_team %></li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<!-- Match Header -->
+<section class="match-header bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="text-center mb-4">
+            <span class="badge bg-white text-primary px-3 py-2 mb-3">
+                <i class="bi bi-trophy me-1"></i><%= match.league %>
+            </span>
+            <p class="mb-0">
+                <i class="bi bi-calendar me-1"></i>
+                <%= helpers.formatDate(match.match_date, 'dddd, MMMM DD, YYYY') %> at 
+                <%= helpers.formatDate(match.match_date, 'HH:mm') %>
+            </p>
+        </div>
+        
+        <div class="row align-items-center justify-content-center">
+            <!-- Home Team -->
+            <div class="col-md-4 text-center">
+                <% if (match.home_logo) { %>
+                    <img src="<%= match.home_logo %>" alt="<%= match.home_team %>" class="team-logo-lg mb-3">
+                <% } else { %>
+                    <div class="team-logo-lg-placeholder mb-3">
+                        <i class="bi bi-shield-fill"></i>
+                    </div>
+                <% } %>
+                <h3 class="fw-bold"><%= match.home_team %></h3>
+                <p class="mb-0">
+                    <span class="badge bg-white bg-opacity-20">Form: <%= match.home_form %></span>
+                </p>
+            </div>
+            
+            <!-- VS -->
+            <div class="col-md-2 text-center py-3">
+                <% if (match.status === 'finished' && match.result_score) { %>
+                    <div class="score-display">
+                        <span class="display-4 fw-bold"><%= match.result_score %></span>
+                        <span class="badge bg-<%= match.bet_status === 'won' ? 'success' : 'danger' %> mt-2 d-block">
+                            <%= match.bet_status.toUpperCase() %>
+                        </span>
+                    </div>
+                <% } else { %>
+                    <div class="vs-circle">
+                        <span class="display-6 fw-bold">VS</span>
+                    </div>
+                <% } %>
+            </div>
+            
+            <!-- Away Team -->
+            <div class="col-md-4 text-center">
+                <% if (match.away_logo) { %>
+                    <img src="<%= match.away_logo %>" alt="<%= match.away_team %>" class="team-logo-lg mb-3">
+                <% } else { %>
+                    <div class="team-logo-lg-placeholder mb-3">
+                        <i class="bi bi-shield-fill"></i>
+                    </div>
+                <% } %>
+                <h3 class="fw-bold"><%= match.away_team %></h3>
+                <p class="mb-0">
+                    <span class="badge bg-white bg-opacity-20">Form: <%= match.away_form %></span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Main Column -->
+            <div class="col-lg-8">
+                <!-- Prediction Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-bullseye me-2"></i>Our Prediction
+                        </h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h3 class="text-primary fw-bold mb-2"><%= match.prediction %></h3>
+                                <% if (match.odds) { %>
+                                    <p class="text-muted mb-0">
+                                        <i class="bi bi-cash me-1"></i>Odds: <strong><%= match.odds %></strong>
+                                    </p>
+                                <% } %>
+                            </div>
+                            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                                <div class="confidence-meter">
+                                    <div class="confidence-circle bg-<%= confidenceInfo.class %>" 
+                                         data-value="<%= match.confidence %>">
+                                        <span class="confidence-value"><%= match.confidence %>%</span>
+                                    </div>
+                                    <small class="d-block mt-2 text-<%= confidenceInfo.class %> fw-bold">
+                                        <%= confidenceInfo.label %> Confidence
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <% if (match.affiliate_link) { %>
+                            <div class="mt-4 pt-4 border-top">
+                                <a href="<%= match.affiliate_link %>" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer"
+                                   class="btn btn-success btn-lg w-100">
+                                    <i class="bi bi-cash-coin me-2"></i>Place Bet Now
+                                </a>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+                
+                <!-- Analysis Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-transparent">
+                        <h5 class="mb-0">
+                            <i class="bi bi-clipboard-data me-2 text-primary"></i>Match Analysis
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <% if (match.analysis) { %>
+                            <div class="analysis-content">
+                                <%- match.analysis.replace(/\n/g, '<br>') %>
+                            </div>
+                        <% } else { %>
+                            <p class="text-muted mb-0">Detailed analysis will be added soon.</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Match Info Card -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-transparent">
+                        <h6 class="mb-0">
+                            <i class="bi bi-info-circle me-2 text-primary"></i>Match Info
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">League</span>
+                                <strong><%= match.league %></strong>
+                            </li>
+                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Date</span>
+                                <strong><%= helpers.formatDate(match.match_date, 'MMM DD, YYYY') %></strong>
+                            </li>
+                            <li class="d-flex justify-content-between py-2 border-bottom">
+                                <span class="text-muted">Time</span>
+                                <strong><%= helpers.formatDate(match.match_date, 'HH:mm') %></strong>
+                            </li>
+                            <li class="d-flex justify-content-between py-2">
+                                <span class="text-muted">Status</span>
+                                <span class="badge bg-<%= match.status === 'upcoming' ? 'primary' : 'secondary' %>">
+                                    <%= match.status.charAt(0).toUpperCase() + match.status.slice(1) %>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Related Matches -->
+                <% if (relatedMatches && relatedMatches.length > 0) { %>
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-header bg-transparent">
+                            <h6 class="mb-0">
+                                <i class="bi bi-calendar-event me-2 text-primary"></i>More from <%= match.league %>
+                            </h6>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                <% relatedMatches.forEach(related => { %>
+                                    <li class="list-group-item">
+                                        <a href="/prediction/<%= related.slug %>" class="text-decoration-none">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <small class="text-muted d-block">
+                                                        <%= helpers.formatDate(related.match_date, 'MMM DD') %>
+                                                    </small>
+                                                    <span class="text-dark">
+                                                        <%= related.home_team %> vs <%= related.away_team %>
+                                                    </span>
+                                                </div>
+                                                <i class="bi bi-chevron-right text-muted"></i>
+                                            </div>
+                                        </a>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</section>
