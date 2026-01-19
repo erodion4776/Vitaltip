@@ -1,0 +1,100 @@
+<% layout('layouts/main') %>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h4 class="mb-0 fw-bold">Edit Match</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/admin/edit/<%= match.id %>" method="POST">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">League</label>
+                                <input type="text" name="league" class="form-control" list="leaguesList" value="<%= match.league %>" required>
+                                <datalist id="leaguesList">
+                                    <% leagues.forEach(league => { %>
+                                        <option value="<%= league %>">
+                                    <% }); %>
+                                </datalist>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Match Date</label>
+                                <!-- Format date for input type datetime-local -->
+                                <% 
+                                    const d = new Date(match.match_date);
+                                    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+                                    const dateStr = d.toISOString().slice(0, 16);
+                                %>
+                                <input type="datetime-local" name="match_date" class="form-control" value="<%= dateStr %>" required>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4 p-3 bg-light rounded">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">Home Team</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" name="home_team" class="form-control" value="<%= match.home_team %>" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Logo URL</label>
+                                    <input type="url" name="home_logo" class="form-control" value="<%= match.home_logo %>">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Form</label>
+                                    <input type="text" name="home_form" class="form-control" value="<%= match.home_form %>">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-danger mb-3">Away Team</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" name="away_team" class="form-control" value="<%= match.away_team %>" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Logo URL</label>
+                                    <input type="url" name="away_logo" class="form-control" value="<%= match.away_logo %>">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Form</label>
+                                    <input type="text" name="away_form" class="form-control" value="<%= match.away_form %>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label">Prediction</label>
+                                <input type="text" name="prediction" class="form-control" value="<%= match.prediction %>" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Confidence (%)</label>
+                                <input type="number" name="confidence" class="form-control" min="1" max="100" value="<%= match.confidence %>">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Odds</label>
+                                <input type="text" name="odds" class="form-control" value="<%= match.odds %>">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Affiliate Link</label>
+                                <input type="url" name="affiliate_link" class="form-control" value="<%= match.affiliate_link %>">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Analysis</label>
+                            <textarea name="analysis" class="form-control" rows="6"><%= match.analysis %></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/admin/dashboard" class="btn btn-light me-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4">Update Match</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
