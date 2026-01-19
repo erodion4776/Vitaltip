@@ -1,51 +1,98 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Add Match - Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-6">
+<% layout('layouts/main') %>
 
-<div class="max-w-2xl mx-auto bg-white p-8 rounded shadow">
-    <h2 class="text-2xl font-bold mb-6">Add New Prediction</h2>
-    
-    <form action="/admin/add" method="POST" class="space-y-4">
-        
-        <div class="grid grid-cols-2 gap-4">
-            <input type="text" name="league" placeholder="League (e.g. Premier League)" class="border p-2 w-full rounded" required>
-            <input type="datetime-local" name="match_date" class="border p-2 w-full rounded" required>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h4 class="mb-0 fw-bold">Add New Match</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/admin/add" method="POST">
+                        <!-- Basic Info -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">League</label>
+                                <input type="text" name="league" class="form-control" list="leaguesList" required>
+                                <datalist id="leaguesList">
+                                    <% leagues.forEach(league => { %>
+                                        <option value="<%= league %>">
+                                    <% }); %>
+                                </datalist>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Match Date & Time</label>
+                                <input type="datetime-local" name="match_date" class="form-control" required>
+                            </div>
+                        </div>
+
+                        <!-- Teams -->
+                        <div class="row g-3 mb-4 p-3 bg-light rounded">
+                            <div class="col-md-6">
+                                <h6 class="text-primary mb-3">Home Team</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" name="home_team" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Logo URL</label>
+                                    <input type="url" name="home_logo" class="form-control" placeholder="https://...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Recent Form</label>
+                                    <input type="text" name="home_form" class="form-control" placeholder="W-D-L-W-W" maxlength="10">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-danger mb-3">Away Team</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" name="away_team" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Logo URL</label>
+                                    <input type="url" name="away_logo" class="form-control" placeholder="https://...">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Recent Form</label>
+                                    <input type="text" name="away_form" class="form-control" placeholder="L-L-D-W-L" maxlength="10">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Prediction -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label">Prediction</label>
+                                <input type="text" name="prediction" class="form-control" placeholder="e.g. Home Win or Over 2.5 Goals" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Confidence (%)</label>
+                                <input type="number" name="confidence" class="form-control" min="1" max="100" value="70">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Odds</label>
+                                <input type="text" name="odds" class="form-control" placeholder="e.g. 1.85">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Affiliate Link (Optional)</label>
+                                <input type="url" name="affiliate_link" class="form-control" placeholder="https://bookmaker.com/...">
+                            </div>
+                        </div>
+
+                        <!-- Analysis -->
+                        <div class="mb-4">
+                            <label class="form-label">Detailed Analysis</label>
+                            <textarea name="analysis" class="form-control" rows="6" placeholder="Write your match analysis here..."></textarea>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="/admin/dashboard" class="btn btn-light me-2">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4">Create Prediction</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="grid grid-cols-2 gap-4">
-            <input type="text" name="home_team" placeholder="Home Team" class="border p-2 w-full rounded" required>
-            <input type="text" name="away_team" placeholder="Away Team" class="border p-2 w-full rounded" required>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-            <input type="text" name="home_form" placeholder="Home Form (W W L D W)" class="border p-2 w-full rounded">
-            <input type="text" name="away_form" placeholder="Away Form (L L D W L)" class="border p-2 w-full rounded">
-        </div>
-
-        <textarea name="analysis" rows="6" placeholder="Write your full analysis here..." class="border p-2 w-full rounded"></textarea>
-
-        <div class="grid grid-cols-3 gap-4">
-            <select name="prediction" class="border p-2 w-full rounded">
-                <option>Home Win</option>
-                <option>Away Win</option>
-                <option>Draw</option>
-                <option>Over 2.5 Goals</option>
-                <option>Under 2.5 Goals</option>
-                <option>BTTS</option>
-            </select>
-            <input type="number" name="confidence" placeholder="Confidence %" class="border p-2 w-full rounded" max="100">
-            <input type="text" name="affiliate_link" placeholder="Affiliate Link (Optional)" class="border p-2 w-full rounded">
-        </div>
-
-        <button type="submit" class="bg-emerald-600 text-white w-full py-3 rounded font-bold hover:bg-emerald-700">
-            Post Prediction
-        </button>
-    </form>
+    </div>
 </div>
-
-</body>
-</html>
