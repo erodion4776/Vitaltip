@@ -5,17 +5,17 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-7 mb-5 mb-lg-0">
-                <span class="badge bg-primary bg-opacity-20 text-primary mb-3 px-3 py-2 rounded-pill">
+                <span class="badge bg-primary bg-opacity-20 text-primary mb-3 px-3 py-2 rounded-pill border border-primary border-opacity-25">
                     <i class="bi bi-stars me-1"></i> Professional Tips
                 </span>
-                <h1 class="display-4 fw-bold mb-3">
+                <h1 class="display-4 fw-bold mb-3 text-white">
                     Beat the Bookies with <span class="text-primary">Data.</span>
                 </h1>
                 <p class="lead text-muted mb-4" style="max-width: 500px;">
                     Daily high-confidence football predictions powered by advanced statistics and expert analysis.
                 </p>
                 <div class="d-flex gap-3 flex-wrap">
-                    <a href="#predictions" class="btn btn-primary btn-lg px-4 shadow-lg">
+                    <a href="#predictions" class="btn btn-primary btn-lg px-4 shadow-lg hover-lift">
                         <i class="bi bi-calendar-check me-2"></i>Today's Tips
                     </a>
                     <a href="/results" class="btn btn-outline-light btn-lg px-4">
@@ -28,32 +28,31 @@
                 <!-- Stats Grid -->
                 <div class="row g-3">
                     <div class="col-6">
-                        <div class="stat-card text-center">
+                        <div class="stat-card text-center h-100">
                             <i class="bi bi-trophy fs-2 mb-2 text-warning"></i>
-                            <h3 class="fw-bold mb-0"><%= stats.winRate %>%</h3>
-                            <small>Win Rate</small>
+                            <h3 class="fw-bold mb-0 text-white"><%= stats.winRate %>%</h3>
+                            <small class="text-muted">Win Rate</small>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="stat-card text-center">
+                        <div class="stat-card text-center h-100">
                             <i class="bi bi-check-circle fs-2 mb-2 text-success"></i>
-                            <h3 class="fw-bold mb-0"><%= stats.won %></h3>
-                            <small>Wins</small>
+                            <h3 class="fw-bold mb-0 text-white"><%= stats.won %></h3>
+                            <small class="text-muted">Wins</small>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="stat-card text-center">
+                        <div class="stat-card text-center h-100">
                             <i class="bi bi-activity fs-2 mb-2 text-info"></i>
-                            <!-- Updated to show total predicted matches if you changed the controller, or just history -->
-                            <h3 class="fw-bold mb-0"><%= stats.total %></h3>
-                            <small>History</small>
+                            <h3 class="fw-bold mb-0 text-white"><%= stats.total %></h3>
+                            <small class="text-muted">History</small>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="stat-card text-center">
+                        <div class="stat-card text-center h-100">
                             <i class="bi bi-clock fs-2 mb-2 text-primary"></i>
-                            <h3 class="fw-bold mb-0"><%= stats.upcoming %></h3>
-                            <small>Active</small>
+                            <h3 class="fw-bold mb-0 text-white"><%= stats.upcoming %></h3>
+                            <small class="text-muted">Active</small>
                         </div>
                     </div>
                 </div>
@@ -86,10 +85,11 @@
             <div class="row g-4">
                 <% matches.forEach(match => { %>
                     <div class="col-lg-6">
-                        <div class="match-card card h-100 border-0 shadow-lg">
+                        <div class="match-card card h-100 border-0 shadow-lg hover-lift">
+                            <!-- Card Header -->
                             <div class="card-header bg-transparent border-bottom border-secondary border-opacity-25 pt-3">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="badge bg-primary bg-opacity-20 text-primary">
+                                    <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-25">
                                         <i class="bi bi-trophy me-1"></i><%= match.league %>
                                     </span>
                                     <span class="text-muted small">
@@ -99,35 +99,43 @@
                                 </div>
                             </div>
                             
+                            <!-- Card Body -->
                             <div class="card-body">
-                                <!-- Teams -->
+                                <!-- Teams Row -->
                                 <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <!-- Home Team -->
                                     <div class="team text-center flex-fill" style="width: 35%;">
                                         <% if (match.home_logo) { %>
-                                            <img src="<%= match.home_logo %>" alt="<%= match.home_team %>" class="team-logo mb-2">
+                                            <!-- LOGO SIZE FIXED HERE: 50px -->
+                                            <img src="<%= match.home_logo %>" alt="<%= match.home_team %>" class="mb-2" style="width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));">
                                         <% } else { %>
-                                            <div class="team-logo-placeholder rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width:50px; height:50px; background: rgba(255,255,255,0.1);">
-                                                <i class="bi bi-shield-fill"></i>
+                                            <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center border border-secondary border-opacity-25" style="width:50px; height:50px; background: rgba(255,255,255,0.05);">
+                                                <i class="bi bi-shield-fill text-muted"></i>
                                             </div>
                                         <% } %>
-                                        <h6 class="mb-1 fw-bold text-white text-truncate"><%= match.home_team %></h6>
-                                        <small class="badge bg-dark text-muted border border-secondary border-opacity-25"><%= match.home_form %></small>
+                                        <h6 class="mb-1 fw-bold text-white text-truncate" style="font-size: 0.95rem;"><%= match.home_team %></h6>
+                                        <!-- Visible Form Badge -->
+                                        <span class="badge bg-white bg-opacity-10 text-light border border-secondary border-opacity-25" style="font-size: 0.7rem; letter-spacing: 1px;"><%= match.home_form %></span>
                                     </div>
                                     
+                                    <!-- VS Badge -->
                                     <div class="vs-badge mx-2">
-                                        <div class="vs-circle rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05);">VS</div>
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 35px; height: 35px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); font-size: 0.8rem;">VS</div>
                                     </div>
                                     
+                                    <!-- Away Team -->
                                     <div class="team text-center flex-fill" style="width: 35%;">
                                         <% if (match.away_logo) { %>
-                                            <img src="<%= match.away_logo %>" alt="<%= match.away_team %>" class="team-logo mb-2">
+                                            <!-- LOGO SIZE FIXED HERE: 50px -->
+                                            <img src="<%= match.away_logo %>" alt="<%= match.away_team %>" class="mb-2" style="width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));">
                                         <% } else { %>
-                                            <div class="team-logo-placeholder rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width:50px; height:50px; background: rgba(255,255,255,0.1);">
-                                                <i class="bi bi-shield-fill"></i>
+                                            <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center border border-secondary border-opacity-25" style="width:50px; height:50px; background: rgba(255,255,255,0.05);">
+                                                <i class="bi bi-shield-fill text-muted"></i>
                                             </div>
                                         <% } %>
-                                        <h6 class="mb-1 fw-bold text-white text-truncate"><%= match.away_team %></h6>
-                                        <small class="badge bg-dark text-muted border border-secondary border-opacity-25"><%= match.away_form %></small>
+                                        <h6 class="mb-1 fw-bold text-white text-truncate" style="font-size: 0.95rem;"><%= match.away_team %></h6>
+                                        <!-- Visible Form Badge -->
+                                        <span class="badge bg-white bg-opacity-10 text-light border border-secondary border-opacity-25" style="font-size: 0.7rem; letter-spacing: 1px;"><%= match.away_form %></span>
                                     </div>
                                 </div>
                                 
@@ -138,13 +146,13 @@
                                             <small class="text-uppercase text-muted d-block" style="font-size: 0.7rem; letter-spacing: 1px;">Prediction</small>
                                             <span class="fw-bold text-white fs-5"><%= match.prediction %></span>
                                             <% if(match.odds) { %>
-                                                <span class="badge bg-dark ms-2">@<%= match.odds %></span>
+                                                <span class="badge bg-dark ms-2 border border-secondary border-opacity-25">@<%= match.odds %></span>
                                             <% } %>
                                         </div>
                                         <div class="text-end">
                                             <% const conf = helpers.getConfidenceLabel(match.confidence); %>
                                             <div class="d-flex flex-column align-items-end">
-                                                <span class="text-<%= conf.class %> fw-bold"><%= match.confidence %>%</span>
+                                                <span class="text-<%= conf.class %> fw-bold fs-5"><%= match.confidence %>%</span>
                                                 <small class="text-muted" style="font-size: 0.7rem;">Confidence</small>
                                             </div>
                                         </div>
@@ -152,8 +160,9 @@
                                 </div>
                             </div>
                             
+                            <!-- Card Footer -->
                             <div class="card-footer bg-transparent border-0 pb-3 pt-0">
-                                <a href="/prediction/<%= match.slug %>" class="btn btn-primary w-100 fw-semibold">
+                                <a href="/prediction/<%= match.slug %>" class="btn btn-primary w-100 fw-semibold shadow-sm">
                                     <i class="bi bi-bar-chart-fill me-2"></i>Analysis & Stats
                                 </a>
                             </div>
@@ -195,12 +204,12 @@
 </section>
 
 <!-- Features Section -->
-<section class="py-5" style="background-color: rgba(255,255,255,0.02);">
+<section class="py-5" style="background-color: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05);">
     <div class="container">
         <h2 class="text-center fw-bold mb-5 text-white">Why Trust Us?</h2>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03);">
+                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
                     <div class="feature-icon bg-primary bg-opacity-10 rounded-circle mx-auto mb-3 text-primary d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
                         <i class="bi bi-cpu fs-2"></i>
                     </div>
@@ -211,7 +220,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03);">
+                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
                     <div class="feature-icon bg-success bg-opacity-10 rounded-circle mx-auto mb-3 text-success d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
                         <i class="bi bi-patch-check fs-2"></i>
                     </div>
@@ -222,7 +231,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03);">
+                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
                     <div class="feature-icon bg-warning bg-opacity-10 rounded-circle mx-auto mb-3 text-warning d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
                         <i class="bi bi-lightning fs-2"></i>
                     </div>
