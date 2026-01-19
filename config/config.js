@@ -12,8 +12,10 @@ module.exports = {
         cookie: {
             maxAge: 24 * 60 * 60 * 1000, // 24 hours
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
+            // Changed to false to prevent login loops on some hosting
+            secure: false, 
+            // Changed to lax for better compatibility
+            sameSite: 'lax'
         }
     },
     
