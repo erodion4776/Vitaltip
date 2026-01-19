@@ -4,17 +4,17 @@
 <section class="hero-section">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-7 mb-5 mb-lg-0">
-                <span class="badge bg-primary bg-opacity-20 text-primary mb-3 px-3 py-2 rounded-pill border border-primary border-opacity-25">
+            <div class="col-lg-7 mb-4 mb-lg-0">
+                <span class="badge bg-primary bg-opacity-20 text-primary mb-3 px-3 py-2 rounded-pill border border-primary border-opacity-25 animate-fade-in-up">
                     <i class="bi bi-stars me-1"></i> Professional Tips
                 </span>
-                <h1 class="display-4 fw-bold mb-3 text-white">
-                    Beat the Bookies with <span class="text-primary">Data.</span>
+                <h1 class="display-4 fw-bold mb-3 text-white animate-fade-in-up">
+                    Beat the Bookies with <span class="text-gradient">Data</span>
                 </h1>
-                <p class="lead text-muted mb-4" style="max-width: 500px;">
+                <p class="lead text-muted mb-4 animate-fade-in-up" style="max-width: 500px; animation-delay: 0.1s;">
                     Daily high-confidence football predictions powered by advanced statistics and expert analysis.
                 </p>
-                <div class="d-flex gap-3 flex-wrap">
+                <div class="d-flex gap-3 flex-wrap animate-fade-in-up" style="animation-delay: 0.2s;">
                     <a href="#predictions" class="btn btn-primary btn-lg px-4 shadow-lg hover-lift">
                         <i class="bi bi-calendar-check me-2"></i>Today's Tips
                     </a>
@@ -25,31 +25,31 @@
             </div>
             
             <div class="col-lg-5">
-                <!-- Stats Grid -->
+                <!-- Stats Grid - Mobile optimized -->
                 <div class="row g-3">
                     <div class="col-6">
-                        <div class="stat-card text-center h-100">
+                        <div class="stat-card text-center h-100 animate-fade-in-up" style="animation-delay: 0.3s;">
                             <i class="bi bi-trophy fs-2 mb-2 text-warning"></i>
                             <h3 class="fw-bold mb-0 text-white"><%= stats.winRate %>%</h3>
                             <small class="text-muted">Win Rate</small>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="stat-card text-center h-100">
+                        <div class="stat-card text-center h-100 animate-fade-in-up" style="animation-delay: 0.4s;">
                             <i class="bi bi-check-circle fs-2 mb-2 text-success"></i>
                             <h3 class="fw-bold mb-0 text-white"><%= stats.won %></h3>
                             <small class="text-muted">Wins</small>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="stat-card text-center h-100">
+                        <div class="stat-card text-center h-100 animate-fade-in-up" style="animation-delay: 0.5s;">
                             <i class="bi bi-activity fs-2 mb-2 text-info"></i>
                             <h3 class="fw-bold mb-0 text-white"><%= stats.total %></h3>
-                            <small class="text-muted">History</small>
+                            <small class="text-muted">Total Tips</small>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="stat-card text-center h-100">
+                        <div class="stat-card text-center h-100 animate-fade-in-up" style="animation-delay: 0.6s;">
                             <i class="bi bi-clock fs-2 mb-2 text-primary"></i>
                             <h3 class="fw-bold mb-0 text-white"><%= stats.upcoming %></h3>
                             <small class="text-muted">Active</small>
@@ -64,11 +64,12 @@
 <!-- Predictions Section -->
 <section id="predictions" class="py-5">
     <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <!-- Header with filters -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
             <h2 class="fw-bold mb-0 text-white">
                 <i class="bi bi-fire me-2 text-primary"></i>Hot Tips
             </h2>
-            <div class="btn-group">
+            <div class="btn-group" role="group" aria-label="Filter predictions">
                 <button class="btn btn-outline-light active btn-sm" data-filter="all">All</button>
                 <button class="btn btn-outline-light btn-sm" data-filter="today">Today</button>
                 <button class="btn btn-outline-light btn-sm" data-filter="tomorrow">Tomorrow</button>
@@ -76,19 +77,24 @@
         </div>
         
         <% if (matches.length === 0) { %>
+            <!-- Empty state -->
             <div class="text-center py-5">
                 <i class="bi bi-calendar-x display-1 text-muted opacity-25"></i>
                 <h4 class="mt-3 text-white">No upcoming predictions</h4>
                 <p class="text-muted">Check back later for new tips!</p>
+                <a href="/results" class="btn btn-outline-primary mt-3">
+                    <i class="bi bi-clock-history me-2"></i>View Past Results
+                </a>
             </div>
         <% } else { %>
+            <!-- Match cards grid -->
             <div class="row g-4">
-                <% matches.forEach(match => { %>
-                    <div class="col-lg-6">
-                        <div class="match-card card h-100 border-0 shadow-lg hover-lift">
+                <% matches.forEach((match, index) => { %>
+                    <div class="col-lg-6 col-12 animate-fade-in-up" style="animation-delay: <%= index * 0.05 %>s;">
+                        <div class="match-card card h-100">
                             <!-- Card Header -->
-                            <div class="card-header bg-transparent border-bottom border-secondary border-opacity-25 pt-3">
-                                <div class="d-flex justify-content-between align-items-center">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
                                     <span class="badge bg-primary bg-opacity-20 text-primary border border-primary border-opacity-25">
                                         <i class="bi bi-trophy me-1"></i><%= match.league %>
                                     </span>
@@ -102,67 +108,75 @@
                             <!-- Card Body -->
                             <div class="card-body">
                                 <!-- Teams Row -->
-                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="row align-items-center mb-3">
                                     <!-- Home Team -->
-                                    <div class="team text-center flex-fill" style="width: 35%;">
+                                    <div class="col-5 text-center">
                                         <% if (match.home_logo) { %>
-                                            <!-- LOGO SIZE FIXED HERE: 50px -->
-                                            <img src="<%= match.home_logo %>" alt="<%= match.home_team %>" class="mb-2" style="width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));">
+                                            <img src="<%= match.home_logo %>" 
+                                                 alt="<%= match.home_team %>" 
+                                                 class="mb-2"
+                                                 loading="lazy">
                                         <% } else { %>
-                                            <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center border border-secondary border-opacity-25" style="width:50px; height:50px; background: rgba(255,255,255,0.05);">
-                                                <i class="bi bi-shield-fill text-muted"></i>
+                                            <div class="team-logo-placeholder rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-shield-fill"></i>
                                             </div>
                                         <% } %>
-                                        <h6 class="mb-1 fw-bold text-white text-truncate" style="font-size: 0.95rem;"><%= match.home_team %></h6>
-                                        <!-- Visible Form Badge -->
-                                        <span class="badge bg-white bg-opacity-10 text-light border border-secondary border-opacity-25" style="font-size: 0.7rem; letter-spacing: 1px;"><%= match.home_form %></span>
+                                        <h6 class="mb-1 fw-bold text-white"><%= match.home_team %></h6>
+                                        <span class="badge bg-white bg-opacity-10 text-light border border-secondary border-opacity-25" style="font-size: 0.7rem;">
+                                            <%= match.home_form %>
+                                        </span>
                                     </div>
                                     
                                     <!-- VS Badge -->
-                                    <div class="vs-badge mx-2">
-                                        <div class="rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 35px; height: 35px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.5); font-size: 0.8rem;">VS</div>
+                                    <div class="col-2 text-center">
+                                        <div class="vs-circle rounded-circle d-flex align-items-center justify-content-center mx-auto">
+                                            VS
+                                        </div>
                                     </div>
                                     
                                     <!-- Away Team -->
-                                    <div class="team text-center flex-fill" style="width: 35%;">
+                                    <div class="col-5 text-center">
                                         <% if (match.away_logo) { %>
-                                            <!-- LOGO SIZE FIXED HERE: 50px -->
-                                            <img src="<%= match.away_logo %>" alt="<%= match.away_team %>" class="mb-2" style="width: 50px; height: 50px; object-fit: contain; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));">
+                                            <img src="<%= match.away_logo %>" 
+                                                 alt="<%= match.away_team %>" 
+                                                 class="mb-2"
+                                                 loading="lazy">
                                         <% } else { %>
-                                            <div class="rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center border border-secondary border-opacity-25" style="width:50px; height:50px; background: rgba(255,255,255,0.05);">
-                                                <i class="bi bi-shield-fill text-muted"></i>
+                                            <div class="team-logo-placeholder rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-shield-fill"></i>
                                             </div>
                                         <% } %>
-                                        <h6 class="mb-1 fw-bold text-white text-truncate" style="font-size: 0.95rem;"><%= match.away_team %></h6>
-                                        <!-- Visible Form Badge -->
-                                        <span class="badge bg-white bg-opacity-10 text-light border border-secondary border-opacity-25" style="font-size: 0.7rem; letter-spacing: 1px;"><%= match.away_form %></span>
+                                        <h6 class="mb-1 fw-bold text-white"><%= match.away_team %></h6>
+                                        <span class="badge bg-white bg-opacity-10 text-light border border-secondary border-opacity-25" style="font-size: 0.7rem;">
+                                            <%= match.away_form %>
+                                        </span>
                                     </div>
                                 </div>
                                 
                                 <!-- Prediction Box -->
-                                <div class="prediction-box rounded-3 p-3 mb-3" style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981;">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <small class="text-uppercase text-muted d-block" style="font-size: 0.7rem; letter-spacing: 1px;">Prediction</small>
-                                            <span class="fw-bold text-white fs-5"><%= match.prediction %></span>
+                                <div class="prediction-box p-3 mb-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-8">
+                                            <small class="text-uppercase text-muted d-block mb-1" style="font-size: 0.7rem; letter-spacing: 1px;">
+                                                Prediction
+                                            </small>
+                                            <span class="fw-bold text-white d-block"><%= match.prediction %></span>
                                             <% if(match.odds) { %>
-                                                <span class="badge bg-dark ms-2 border border-secondary border-opacity-25">@<%= match.odds %></span>
+                                                <span class="badge bg-dark mt-1">@<%= match.odds %></span>
                                             <% } %>
                                         </div>
-                                        <div class="text-end">
+                                        <div class="col-4 text-end">
                                             <% const conf = helpers.getConfidenceLabel(match.confidence); %>
-                                            <div class="d-flex flex-column align-items-end">
-                                                <span class="text-<%= conf.class %> fw-bold fs-5"><%= match.confidence %>%</span>
-                                                <small class="text-muted" style="font-size: 0.7rem;">Confidence</small>
-                                            </div>
+                                            <span class="text-<%= conf.class %> fw-bold fs-5 d-block"><%= match.confidence %>%</span>
+                                            <small class="text-muted" style="font-size: 0.7rem;">Confidence</small>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             
                             <!-- Card Footer -->
-                            <div class="card-footer bg-transparent border-0 pb-3 pt-0">
-                                <a href="/prediction/<%= match.slug %>" class="btn btn-primary w-100 fw-semibold shadow-sm">
+                            <div class="card-footer">
+                                <a href="/prediction/<%= match.slug %>" class="btn btn-primary w-100 fw-semibold">
                                     <i class="bi bi-bar-chart-fill me-2"></i>Analysis & Stats
                                 </a>
                             </div>
@@ -173,25 +187,59 @@
             
             <!-- Pagination -->
             <% if (pagination.totalPages > 1) { %>
-                <nav class="mt-5">
-                    <ul class="pagination justify-content-center">
+                <nav class="mt-5" aria-label="Predictions pagination">
+                    <ul class="pagination justify-content-center flex-wrap">
                         <% if (pagination.hasPrevPage) { %>
                             <li class="page-item">
-                                <a class="page-link bg-dark border-secondary text-light" href="?page=<%= pagination.prevPage %>">
+                                <a class="page-link" href="?page=<%= pagination.prevPage %>" aria-label="Previous">
                                     <i class="bi bi-chevron-left"></i>
+                                    <span class="d-none d-sm-inline ms-1">Previous</span>
                                 </a>
                             </li>
                         <% } %>
                         
-                        <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+                        <% 
+                        // Smart pagination for mobile
+                        const maxPages = 5;
+                        let startPage = Math.max(1, pagination.currentPage - 2);
+                        let endPage = Math.min(pagination.totalPages, startPage + maxPages - 1);
+                        if (endPage - startPage < maxPages - 1) {
+                            startPage = Math.max(1, endPage - maxPages + 1);
+                        }
+                        %>
+                        
+                        <% if (startPage > 1) { %>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=1">1</a>
+                            </li>
+                            <% if (startPage > 2) { %>
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            <% } %>
+                        <% } %>
+                        
+                        <% for(let i = startPage; i <= endPage; i++) { %>
                             <li class="page-item <%= i === pagination.currentPage ? 'active' : '' %>">
-                                <a class="page-link <%= i === pagination.currentPage ? 'bg-primary border-primary' : 'bg-dark border-secondary text-light' %>" href="?page=<%= i %>"><%= i %></a>
+                                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                        
+                        <% if (endPage < pagination.totalPages) { %>
+                            <% if (endPage < pagination.totalPages - 1) { %>
+                                <li class="page-item disabled">
+                                    <span class="page-link">...</span>
+                                </li>
+                            <% } %>
+                            <li class="page-item">
+                                <a class="page-link" href="?page=<%= pagination.totalPages %>"><%= pagination.totalPages %></a>
                             </li>
                         <% } %>
                         
                         <% if (pagination.hasNextPage) { %>
                             <li class="page-item">
-                                <a class="page-link bg-dark border-secondary text-light" href="?page=<%= pagination.nextPage %>">
+                                <a class="page-link" href="?page=<%= pagination.nextPage %>" aria-label="Next">
+                                    <span class="d-none d-sm-inline me-1">Next</span>
                                     <i class="bi bi-chevron-right"></i>
                                 </a>
                             </li>
@@ -204,42 +252,60 @@
 </section>
 
 <!-- Features Section -->
-<section class="py-5" style="background-color: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05);">
+<section class="py-5" style="background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.05);">
     <div class="container">
-        <h2 class="text-center fw-bold mb-5 text-white">Why Trust Us?</h2>
+        <h2 class="text-center fw-bold mb-5 text-white">Why Choose Us?</h2>
         <div class="row g-4">
             <div class="col-md-4">
-                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                    <div class="feature-icon bg-primary bg-opacity-10 rounded-circle mx-auto mb-3 text-primary d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                <div class="text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s;">
+                    <div class="bg-primary bg-opacity-10 rounded-circle mx-auto mb-3 text-primary d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
                         <i class="bi bi-cpu fs-2"></i>
                     </div>
-                    <h5 class="fw-bold text-white">AI Analysis</h5>
+                    <h5 class="fw-bold text-white mb-3">AI-Powered Analysis</h5>
                     <p class="text-muted mb-0">
-                        Algorithms processing thousands of data points to find value.
+                        Advanced algorithms process thousands of data points to identify high-value betting opportunities.
                     </p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                    <div class="feature-icon bg-success bg-opacity-10 rounded-circle mx-auto mb-3 text-success d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                <div class="text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s;">
+                    <div class="bg-success bg-opacity-10 rounded-circle mx-auto mb-3 text-success d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
                         <i class="bi bi-patch-check fs-2"></i>
                     </div>
-                    <h5 class="fw-bold text-white">Verified History</h5>
+                    <h5 class="fw-bold text-white mb-3">100% Transparent</h5>
                     <p class="text-muted mb-0">
-                        We track every single tip. No deleting lost slips.
+                        Every prediction is tracked and published. No deleted tips, no hidden losses. Complete transparency.
                     </p>
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
-                    <div class="feature-icon bg-warning bg-opacity-10 rounded-circle mx-auto mb-3 text-warning d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                <div class="text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s;">
+                    <div class="bg-warning bg-opacity-10 rounded-circle mx-auto mb-3 text-warning d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
                         <i class="bi bi-lightning fs-2"></i>
                     </div>
-                    <h5 class="fw-bold text-white">Daily Updates</h5>
+                    <h5 class="fw-bold text-white mb-3">Daily Updates</h5>
                     <p class="text-muted mb-0">
-                        Fresh predictions posted 24 hours before kick-off.
+                        Fresh predictions posted daily, 24 hours before kick-off. Never miss an opportunity.
                     </p>
                 </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center p-5 rounded-3" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%); border: 1px solid rgba(59, 130, 246, 0.2);">
+            <h2 class="fw-bold text-white mb-3">Ready to Start Winning?</h2>
+            <p class="lead text-muted mb-4">Join thousands of smart bettors making data-driven decisions</p>
+            <div class="d-flex gap-3 justify-content-center flex-wrap">
+                <a href="#predictions" class="btn btn-primary btn-lg px-4">
+                    <i class="bi bi-graph-up-arrow me-2"></i>View Today's Tips
+                </a>
+                <a href="/results" class="btn btn-outline-light btn-lg px-4">
+                    <i class="bi bi-clock-history me-2"></i>Our Track Record
+                </a>
             </div>
         </div>
     </div>
