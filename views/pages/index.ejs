@@ -44,8 +44,9 @@
                     <div class="col-6">
                         <div class="stat-card text-center">
                             <i class="bi bi-activity fs-2 mb-2 text-info"></i>
+                            <!-- Updated to show total predicted matches if you changed the controller, or just history -->
                             <h3 class="fw-bold mb-0"><%= stats.total %></h3>
-                            <small>Total Tips</small>
+                            <small>History</small>
                         </div>
                     </div>
                     <div class="col-6">
@@ -61,5 +62,176 @@
     </div>
 </section>
 
-<!-- KEEP THE REST OF THE FILE THE SAME FROM HERE DOWN -->
-<!-- Predictions Section... -->
+<!-- Predictions Section -->
+<section id="predictions" class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold mb-0 text-white">
+                <i class="bi bi-fire me-2 text-primary"></i>Hot Tips
+            </h2>
+            <div class="btn-group">
+                <button class="btn btn-outline-light active btn-sm" data-filter="all">All</button>
+                <button class="btn btn-outline-light btn-sm" data-filter="today">Today</button>
+                <button class="btn btn-outline-light btn-sm" data-filter="tomorrow">Tomorrow</button>
+            </div>
+        </div>
+        
+        <% if (matches.length === 0) { %>
+            <div class="text-center py-5">
+                <i class="bi bi-calendar-x display-1 text-muted opacity-25"></i>
+                <h4 class="mt-3 text-white">No upcoming predictions</h4>
+                <p class="text-muted">Check back later for new tips!</p>
+            </div>
+        <% } else { %>
+            <div class="row g-4">
+                <% matches.forEach(match => { %>
+                    <div class="col-lg-6">
+                        <div class="match-card card h-100 border-0 shadow-lg">
+                            <div class="card-header bg-transparent border-bottom border-secondary border-opacity-25 pt-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary bg-opacity-20 text-primary">
+                                        <i class="bi bi-trophy me-1"></i><%= match.league %>
+                                    </span>
+                                    <span class="text-muted small">
+                                        <i class="bi bi-clock me-1"></i>
+                                        <%= helpers.formatDate(match.match_date, 'MMM DD, HH:mm') %>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="card-body">
+                                <!-- Teams -->
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <div class="team text-center flex-fill" style="width: 35%;">
+                                        <% if (match.home_logo) { %>
+                                            <img src="<%= match.home_logo %>" alt="<%= match.home_team %>" class="team-logo mb-2">
+                                        <% } else { %>
+                                            <div class="team-logo-placeholder rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width:50px; height:50px; background: rgba(255,255,255,0.1);">
+                                                <i class="bi bi-shield-fill"></i>
+                                            </div>
+                                        <% } %>
+                                        <h6 class="mb-1 fw-bold text-white text-truncate"><%= match.home_team %></h6>
+                                        <small class="badge bg-dark text-muted border border-secondary border-opacity-25"><%= match.home_form %></small>
+                                    </div>
+                                    
+                                    <div class="vs-badge mx-2">
+                                        <div class="vs-circle rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05);">VS</div>
+                                    </div>
+                                    
+                                    <div class="team text-center flex-fill" style="width: 35%;">
+                                        <% if (match.away_logo) { %>
+                                            <img src="<%= match.away_logo %>" alt="<%= match.away_team %>" class="team-logo mb-2">
+                                        <% } else { %>
+                                            <div class="team-logo-placeholder rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width:50px; height:50px; background: rgba(255,255,255,0.1);">
+                                                <i class="bi bi-shield-fill"></i>
+                                            </div>
+                                        <% } %>
+                                        <h6 class="mb-1 fw-bold text-white text-truncate"><%= match.away_team %></h6>
+                                        <small class="badge bg-dark text-muted border border-secondary border-opacity-25"><%= match.away_form %></small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Prediction Box -->
+                                <div class="prediction-box rounded-3 p-3 mb-3" style="background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981;">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <small class="text-uppercase text-muted d-block" style="font-size: 0.7rem; letter-spacing: 1px;">Prediction</small>
+                                            <span class="fw-bold text-white fs-5"><%= match.prediction %></span>
+                                            <% if(match.odds) { %>
+                                                <span class="badge bg-dark ms-2">@<%= match.odds %></span>
+                                            <% } %>
+                                        </div>
+                                        <div class="text-end">
+                                            <% const conf = helpers.getConfidenceLabel(match.confidence); %>
+                                            <div class="d-flex flex-column align-items-end">
+                                                <span class="text-<%= conf.class %> fw-bold"><%= match.confidence %>%</span>
+                                                <small class="text-muted" style="font-size: 0.7rem;">Confidence</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-footer bg-transparent border-0 pb-3 pt-0">
+                                <a href="/prediction/<%= match.slug %>" class="btn btn-primary w-100 fw-semibold">
+                                    <i class="bi bi-bar-chart-fill me-2"></i>Analysis & Stats
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+            
+            <!-- Pagination -->
+            <% if (pagination.totalPages > 1) { %>
+                <nav class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        <% if (pagination.hasPrevPage) { %>
+                            <li class="page-item">
+                                <a class="page-link bg-dark border-secondary text-light" href="?page=<%= pagination.prevPage %>">
+                                    <i class="bi bi-chevron-left"></i>
+                                </a>
+                            </li>
+                        <% } %>
+                        
+                        <% for (let i = 1; i <= pagination.totalPages; i++) { %>
+                            <li class="page-item <%= i === pagination.currentPage ? 'active' : '' %>">
+                                <a class="page-link <%= i === pagination.currentPage ? 'bg-primary border-primary' : 'bg-dark border-secondary text-light' %>" href="?page=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                        
+                        <% if (pagination.hasNextPage) { %>
+                            <li class="page-item">
+                                <a class="page-link bg-dark border-secondary text-light" href="?page=<%= pagination.nextPage %>">
+                                    <i class="bi bi-chevron-right"></i>
+                                </a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </nav>
+            <% } %>
+        <% } %>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5" style="background-color: rgba(255,255,255,0.02);">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5 text-white">Why Trust Us?</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03);">
+                    <div class="feature-icon bg-primary bg-opacity-10 rounded-circle mx-auto mb-3 text-primary d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                        <i class="bi bi-cpu fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-white">AI Analysis</h5>
+                    <p class="text-muted mb-0">
+                        Algorithms processing thousands of data points to find value.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03);">
+                    <div class="feature-icon bg-success bg-opacity-10 rounded-circle mx-auto mb-3 text-success d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                        <i class="bi bi-patch-check fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-white">Verified History</h5>
+                    <p class="text-muted mb-0">
+                        We track every single tip. No deleting lost slips.
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card text-center p-4 rounded-3 h-100" style="background: rgba(255,255,255,0.03);">
+                    <div class="feature-icon bg-warning bg-opacity-10 rounded-circle mx-auto mb-3 text-warning d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                        <i class="bi bi-lightning fs-2"></i>
+                    </div>
+                    <h5 class="fw-bold text-white">Daily Updates</h5>
+                    <p class="text-muted mb-0">
+                        Fresh predictions posted 24 hours before kick-off.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
