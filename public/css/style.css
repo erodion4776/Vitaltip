@@ -1,55 +1,122 @@
 /* ============================================
-   VITAL TIPS PRO - Premium Dark Theme
+   VITAL TIPS PRO - Professional Modern Design
    ============================================ */
 
 :root {
-    /* Color Palette - Premium Dark Sports */
-    --bg-body: #0f172a;        /* Deep Navy */
-    --bg-card: #1e293b;        /* Lighter Navy */
-    --primary: #3b82f6;        /* Bright Blue */
-    --accent: #10b981;         /* Betting Green */
-    --text-main: #f8fafc;      /* White-ish */
-    --text-muted: #94a3b8;     /* Grey */
-    --border: #334155;         /* Border color */
+    /* Color Palette */
+    --bg-body: #0a0e1a;
+    --bg-card: #161b2e;
+    --bg-card-hover: #1e2538;
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --accent: #10b981;
+    --accent-dark: #059669;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-dark: #475569;
+    --border: #1e293b;
+    --border-light: #334155;
     
-    /* Gradients */
-    --hero-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-    --gold-gradient: linear-gradient(45deg, #fbbf24, #d97706);
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6);
+    
+    /* Transitions */
+    --transition-base: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
     background-color: var(--bg-body);
     color: var(--text-main);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
 }
 
-/* --- Navbar --- */
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* ============================================
+   NAVBAR - Mobile First
+   ============================================ */
 .navbar {
-    background-color: rgba(15, 23, 42, 0.9) !important; /* Glass effect */
-    backdrop-filter: blur(10px);
+    background: rgba(10, 14, 26, 0.95) !important;
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
-    padding: 1rem 0;
+    padding: 0.75rem 0;
+    box-shadow: var(--shadow-md);
 }
 
 .navbar-brand {
-    font-weight: 800;
-    letter-spacing: -0.5px;
+    font-weight: 700;
+    font-size: 1.25rem;
     color: var(--text-main) !important;
+    transition: var(--transition-base);
+}
+
+.navbar-brand:hover {
+    color: var(--primary) !important;
 }
 
 .navbar-brand i {
     color: var(--accent);
 }
 
-/* --- Hero Section --- */
+.nav-link {
+    color: var(--text-muted) !important;
+    font-weight: 500;
+    padding: 0.5rem 1rem !important;
+    border-radius: 8px;
+    transition: var(--transition-base);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--text-main) !important;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+.navbar-toggler {
+    border-color: var(--border-light);
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Mobile navbar improvements */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background: var(--bg-card);
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+    }
+    
+    .navbar-nav {
+        gap: 0.5rem;
+    }
+}
+
+/* ============================================
+   HERO SECTION - Responsive
+   ============================================ */
 .hero-section {
-    background: var(--hero-gradient) !important;
-    padding: 4rem 0 6rem; /* Extra padding bottom */
+    background: linear-gradient(135deg, #0a0e1a 0%, #1e1b4b 100%);
+    padding: 3rem 0 4rem;
     position: relative;
     overflow: hidden;
 }
 
-/* Subtle pattern overlay */
 .hero-section::after {
     content: '';
     position: absolute;
@@ -60,30 +127,73 @@ body {
     pointer-events: none;
 }
 
+.hero-section .container {
+    position: relative;
+    z-index: 1;
+}
+
 .display-4 {
     font-weight: 800;
-    letter-spacing: -1px;
-    text-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
 }
 
-/* --- Buttons --- */
-.btn-primary {
-    background-color: var(--primary);
-    border: none;
+/* Mobile hero adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 2rem 0 3rem;
+        text-align: center;
+    }
+    
+    .hero-section .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .hero-section .d-flex {
+        flex-direction: column;
+    }
+}
+
+/* ============================================
+   BUTTONS - Modern & Accessible
+   ============================================ */
+.btn {
     font-weight: 600;
     padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    transition: var(--transition-base);
+    border: none;
+    box-shadow: var(--shadow-sm);
 }
 
-.btn-light {
-    background: var(--text-main);
-    color: var(--bg-body);
-    border: none;
-    font-weight: 700;
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: white;
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
 }
 
 .btn-outline-light {
-    border: 2px solid var(--border);
+    border: 2px solid var(--border-light);
     color: var(--text-muted);
+    background: transparent;
 }
 
 .btn-outline-light:hover {
@@ -92,24 +202,50 @@ body {
     color: var(--text-main);
 }
 
-/* --- Stats Cards (The fixes) --- */
+.btn-light {
+    background: white;
+    color: var(--bg-body);
+    font-weight: 700;
+}
+
+.btn-light:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Mobile button sizing */
+@media (max-width: 576px) {
+    .btn-lg {
+        padding: 0.875rem 1.25rem;
+        font-size: 1rem;
+    }
+}
+
+/* ============================================
+   STAT CARDS - Responsive Grid
+   ============================================ */
 .stat-card {
-    background: rgba(30, 41, 59, 0.6) !important; /* Semi-transparent */
+    background: var(--bg-card) !important;
     border: 1px solid var(--border);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(10px);
     padding: 1.5rem;
-    border-radius: 12px;
-    transition: transform 0.2s;
+    border-radius: 16px;
+    transition: var(--transition-base);
+    box-shadow: var(--shadow-md);
 }
 
 .stat-card:hover {
-    background: var(--bg-card) !important;
+    background: var(--bg-card-hover) !important;
     border-color: var(--primary);
-    transform: translateY(-3px);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
 }
 
 .stat-card h3 {
     color: var(--text-main);
+    font-weight: 700;
+    margin: 0.5rem 0;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
 }
 
 .stat-card small {
@@ -117,59 +253,410 @@ body {
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 1px;
+    font-weight: 600;
 }
 
-/* --- Match Cards --- */
+.stat-card i {
+    font-size: clamp(1.75rem, 3vw, 2rem);
+}
+
+/* Mobile stat card spacing */
+@media (max-width: 768px) {
+    .stat-card {
+        padding: 1rem;
+        margin-bottom: 0.75rem;
+    }
+}
+
+/* ============================================
+   MATCH CARDS - Enhanced Design
+   ============================================ */
 .match-card {
-    background-color: var(--bg-card);
+    background: var(--bg-card);
     border: 1px solid var(--border);
+    border-radius: 16px;
     color: var(--text-main);
+    transition: var(--transition-base);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.match-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-xl);
+    border-color: var(--primary);
 }
 
 .match-card .card-header {
+    background: rgba(255, 255, 255, 0.02);
     border-bottom: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+}
+
+.match-card .card-body {
+    padding: 1.5rem 1.25rem;
+}
+
+.match-card .card-footer {
+    background: transparent;
+    border-top: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+}
+
+/* Team logos - Consistent sizing */
+.match-card img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(0,0,0,0.5));
 }
 
 .team-logo-placeholder {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-muted);
-}
-
-.vs-circle {
-    background: var(--bg-body);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--border);
     color: var(--text-muted);
-    font-size: 0.8rem;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
 }
 
+/* VS Circle */
+.vs-circle {
+    background: var(--bg-body);
+    border: 2px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    width: 35px;
+    height: 35px;
+    font-weight: 700;
+}
+
+/* Prediction Box */
 .prediction-box {
-    background: rgba(16, 185, 129, 0.1); /* Subtle green tint */
+    background: rgba(16, 185, 129, 0.08);
     border-left: 4px solid var(--accent);
+    border-radius: 8px;
+}
+
+/* Form badges */
+.badge {
+    font-weight: 600;
+    padding: 0.35em 0.65em;
+    font-size: 0.75rem;
+}
+
+/* Mobile match card adjustments */
+@media (max-width: 576px) {
+    .match-card .card-body {
+        padding: 1rem;
+    }
+    
+    .match-card h6 {
+        font-size: 0.85rem;
+    }
+    
+    .match-card img,
+    .team-logo-placeholder {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ============================================
+   FORMS - Better UX
+   ============================================ */
+.form-control,
+.form-select {
+    background: var(--bg-card);
+    border: 2px solid var(--border);
+    color: var(--text-main);
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    transition: var(--transition-base);
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: var(--bg-body);
+    border-color: var(--primary);
+    color: var(--text-main);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.form-control::placeholder {
+    color: var(--text-dark);
+}
+
+.form-label {
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+/* Mobile form improvements */
+@media (max-width: 576px) {
+    .form-control,
+    .form-select {
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+}
+
+/* ============================================
+   TABLES - Mobile Responsive
+   ============================================ */
+.table {
     color: var(--text-main);
 }
 
-/* --- Footer --- */
-footer {
-    background-color: var(--bg-card) !important;
-    border-top: 1px solid var(--border);
+.table thead {
+    background: var(--bg-body);
+    border-bottom: 2px solid var(--border-light);
 }
 
-/* --- Mobile Fixes --- */
+.table tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: var(--transition-base);
+}
+
+.table tbody tr:hover {
+    background: var(--bg-card-hover);
+}
+
+.table td,
+.table th {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+/* Mobile table scrolling */
 @media (max-width: 768px) {
-    .display-4 {
-        font-size: 2.5rem;
+    .table-responsive {
+        border-radius: 12px;
+        box-shadow: var(--shadow-md);
     }
-    .stat-card {
-        margin-bottom: 0.5rem;
+    
+    .table td,
+    .table th {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* ============================================
+   CARDS - Consistent Design
+   ============================================ */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+}
+
+.card-header {
+    background: rgba(255, 255, 255, 0.02);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+/* Mobile card padding */
+@media (max-width: 576px) {
+    .card-body {
         padding: 1rem;
     }
-    .hero-section {
-        padding: 3rem 0;
-        text-align: center;
+}
+
+/* ============================================
+   ALERTS - Improved Visibility
+   ============================================ */
+.alert {
+    border-radius: 12px;
+    border: none;
+    padding: 1rem 1.25rem;
+    box-shadow: var(--shadow-md);
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border-left: 4px solid #10b981;
+}
+
+.alert-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-left: 4px solid #ef4444;
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border-left: 4px solid #f59e0b;
+}
+
+.alert-info {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+    border-left: 4px solid #3b82f6;
+}
+
+/* ============================================
+   FOOTER - Responsive
+   ============================================ */
+footer {
+    background: var(--bg-card) !important;
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+}
+
+footer a {
+    transition: var(--transition-base);
+}
+
+footer a:hover {
+    color: var(--primary) !important;
+}
+
+/* Mobile footer adjustments */
+@media (max-width: 768px) {
+    footer .row > div {
+        margin-bottom: 2rem;
     }
-    .hero-section .d-flex {
+    
+    footer .social-links {
         justify-content: center;
+        display: flex;
+    }
+}
+
+/* ============================================
+   PAGINATION - Better Touch Targets
+   ============================================ */
+.pagination {
+    gap: 0.5rem;
+}
+
+.page-link {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    transition: var(--transition-base);
+    min-width: 40px;
+    text-align: center;
+}
+
+.page-link:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--primary);
+    color: var(--text-main);
+}
+
+.page-item.active .page-link {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Mobile pagination */
+@media (max-width: 576px) {
+    .page-link {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* ============================================
+   UTILITIES - Responsive Spacing
+   ============================================ */
+.hover-lift {
+    transition: var(--transition-base);
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Mobile spacing utilities */
+@media (max-width: 768px) {
+    .py-5 {
+        padding-top: 3rem !important;
+        padding-bottom: 3rem !important;
+    }
+    
+    .mb-5 {
+        margin-bottom: 2rem !important;
+    }
+}
+
+/* ============================================
+   ANIMATIONS
+   ============================================ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    outline: 3px solid rgba(59, 130, 246, 0.5);
+    outline-offset: 2px;
+}
+
+/* Skip to content link */
+.skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--primary);
+    color: white;
+    padding: 8px;
+    text-decoration: none;
+    z-index: 100;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .navbar,
+    footer,
+    .btn,
+    .pagination {
+        display: none;
+    }
+    
+    body {
+        background: white;
+        color: black;
     }
 }
